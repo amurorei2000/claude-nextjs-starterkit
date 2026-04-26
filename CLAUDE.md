@@ -6,6 +6,11 @@
 
 이 프로젝트는 **Next.js 16.2.4**를 사용합니다. 학습 데이터와 API, 컨벤션, 파일 구조가 다를 수 있습니다. 코드 작성 전 반드시 `node_modules/next/dist/docs/`에서 현재 API를 확인하세요. 지원 중단 공지를 반드시 따르세요.
 
+**React 19.2.4** 사용 중. hook, ref, `use()` 처리 방식이 학습 데이터와 다를 수 있습니다.
+
+**기본 폰트**: `body`는 `font-mono`(JetBrains Mono)가 기본값입니다. sans-serif가 필요하면 `font-sans`를 명시적으로 지정하세요.
+CSS 변수: `--font-geist-sans`(Geist), `--font-mono`(JetBrains Mono + Geist Mono 공용)
+
 ## 명령어
 
 모든 명령어는 `my-app/` 디렉토리에서 실행합니다:
@@ -24,6 +29,15 @@ pnpm lint       # ESLint 실행 (eslint-config-next core-web-vitals + typescript
 앱은 전적으로 `my-app/` 안에 있습니다. 루트 `claude-nextjs-starterkit/` 디렉토리는 단순 래퍼입니다.
 
 **경로 별칭**: `@/*` → `./` (프로젝트 루트, 즉 `my-app/`)
+
+### 현재 페이지
+
+| 경로 | 파일 | 타입 |
+|------|------|------|
+| `/` | `app/page.tsx` | Server Component |
+| `/about` | `app/about/page.tsx` | Server Component |
+| `/features` | `app/features/page.tsx` | Server Component |
+| `/contact` | `app/contact/page.tsx` | Client Component (`"use client"`) |
 
 ### 레이아웃 구조
 
@@ -86,13 +100,18 @@ ui/: button, card, badge, avatar, separator, skeleton
 | 용도 | 라이브러리 |
 |---|---|
 | React 커스텀 훅 | **`usehooks-ts`** — `useLocalStorage`, `useDebounce`, `useMediaQuery`, `useOnClickOutside` 등 |
-| 날짜 처리 | `date-fns` 또는 `dayjs` |
-| 폼 상태 관리 | `react-hook-form` |
-| 스키마 검증 | `zod` |
 | 클래스 병합 | `clsx` + `tailwind-merge` (`cn()` 사용) |
 | 애니메이션 | `tw-animate-css` (이미 전역 적용) |
 | 토스트 알림 | `sonner` (`Toaster`는 layout에 등록됨) |
 | HTTP 요청 | `fetch` (Next.js 내장) |
+
+추가 필요 시 권장 라이브러리 (현재 **미설치** — `pnpm add` 필요):
+
+| 용도 | 라이브러리 |
+|---|---|
+| 폼 상태 관리 | `react-hook-form` |
+| 스키마 검증 | `zod` |
+| 날짜 처리 | `date-fns` 또는 `dayjs` |
 | 서버 상태 | `@tanstack/react-query` |
 
 새 라이브러리를 추가할 때는 번들 크기와 유지보수 활성도를 확인하고, npm trends나 bundlephobia에서 먼저 검토하세요.
@@ -104,3 +123,9 @@ pnpm shadcn add <컴포넌트명>
 ```
 
 `components.json`의 스타일: `radix-lyra`, 아이콘: `phosphor`
+
+## 커스텀 Claude 자동화
+
+- `.claude/commands/add-get-endpoint.md` — `/add-get-endpoint <name> <table> <column> <value>`: PostgreSQL GET API 엔드포인트 자동 생성
+- `.claude/agents/component-bug-analyzer.md` — 컴포넌트 생성/대규모 수정 후 자동 호출되는 버그 분석 에이전트
+- **PostToolUse 훅** (`settings.local.json`): `.ts`/`.tsx` 파일 수정 시마다 `tsc --noEmit` 자동 실행
